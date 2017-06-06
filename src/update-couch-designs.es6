@@ -7,6 +7,7 @@ import path from 'path';
 import fs from 'fs';
 import { format } from 'util';
 import ixcouch from 'couchdb-indexer';
+import { parseDesignJs } from './parse-js-files';
 
 export default ({
   db = '',
@@ -38,7 +39,7 @@ export default ({
     // Import all the files. They should all be either valid JSON or valid JS
     // programs. Node's require can handle both. This will throw if any of the
     // design document files are invalid.
-    let docs = files.map(( file ) => require(path.resolve(file)));
+    let docs = files.map(( file ) => parseDesignJs(require(path.resolve(file))));
     let qouch = new Qouch(db);
 
     return new Promise(( resolve, reject ) => {
